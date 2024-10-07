@@ -1,1 +1,43 @@
 
+{% extends 'base.html' %}
+
+{% block content %}
+<html>
+
+  <h1>Add new crew member </h1>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  <form method="post">
+
+    <label for="Name">Name</label><br>
+    <input type="text" id="Name" name="Name"><br>
+
+    <label for="Staff_member">Staff member</label><br>
+    <textarea id="Staff_member" name="Staff_member"></textarea><br>
+
+    <label for="Rank">Rank</label><br>
+    <textarea id="Rank" name="Rank"></textarea><br>
+
+   <br>
+
+     <input id="testCheck" type="checkbox" value  name="checkGo">
+     <label for="testCheck">Exam passed</label>
+
+     <input id="XXXtestCheck" type="checkbox" value  name="XXXcheckGo">
+     <label for="XXXtestCheck">Cleared for flights</label>
+
+    <br>
+
+    <input type="submit" value="Submit">
+
+  </form>
+
+</html>
+{% endblock %}
