@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crew candidates</title>
+</head>
+<body>
+    <h1>Crew candidates</h1>
+
+     <a href="{{ url_for('add_post') }}"><button>Add new crew member</button></a>
+
+
+    <ul>
+        {% for post in posts %}
+        <li><a href="{{ url_for('get_post', post_id=post['id']) }}">{{ post['Name'] }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
