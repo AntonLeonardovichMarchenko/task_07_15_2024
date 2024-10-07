@@ -1,0 +1,557 @@
+Работа с фреймворком. Flask
+
+Фреймворк — это готовый набор инструментов, который помогает разработчику быстро создать программный продукт: сайт, приложение, интернет-магазин, CMS-систему. 
+Предполагается, что фреймворк должен описывать изначальную заготовку и множество инструкций, на основе которых можно написать код. Он экономит время и силы программиста, которые ушли бы на создание базовых вещей и исправление простых (???) ошибок (последнее – не всегда простое дело).
+Общее (рекламное) описание Flask.
+Flask:   –  фреймворк для быстрой (?) разработки веб-приложений. Предоставляет минимальную необходимую функциональность и не навязывает строгих правил в отношении структуры и архитектуры приложения (и это одно из его достоинств).
+Flask универсален – на его основе можно создавать сложные приложения и API, и в то же время он  подходит и для разработки небольших проектов. 
+Основные преимущества Flask:
+Минималистичность. Flask отличается небольшим размером – в нем есть все самое необходимое и нет ничего лишнего.
+Гибкость. Фреймворк не диктует определенных правил и позволяет разработчику сохранить полный контроль над структурой приложения.
+Простота в использовании. Он имеет несколько встроенных функций, которые позволяют сразу начать создавать полноценные веб-приложения. Например, у Flask есть встроенный сервер, поддержка сессий, обработчик форм, шаблонизатор.
+Интеграция с дополнительными библиотеками. Фреймворк просто интегрируется с многочисленными библиотеками, которые расширяют его функциональность. Это позволяет создать гибкий, масштабируемый проект для любой сферы.
+Простота тестирования (???). У Flask есть встроенный тестовый клиент, который максимально упрощает тестирование и отладку.
+
+
+У большинства современных сайтов и сервисов есть два слоя: фронтенд для пользователей и бэкенд для технических действий. С фронтендом взаимодействуют обычные клиенты, а бэкенд находится под "капотом" и обрабатывает запросы от фронтенда.
+
+Задание. 
+Требуется создать  сайт с применением Flask с главной страницей, возможно, со страницей с контактами, страница с формой, страница с результатами...
+Далее всё просто. Возможно, что страница с формой будет осуществлять поиск и показывать пользователю результаты на отдельной или на этой же странице. Короче, должен быть представлен основной функционал, а дальше – как получится. 
+
+Все вопросы  установки здесь не обсуждаются. Дальше представляется пример простейшего приложения на  Flask.
+Сайт на Flask: основа для приложения. Это новый  файл с именем app.py. 
+Это и будет Flask-приложение.
+На первом этапе импортируется класс Flask из библиотеки Flask:
+
+from flask import Flask
+Затем создаётся объект  класса Flask:
+app = Flask(__name__)
+Аргумент __name__  передаётся конструктору класса. Этот аргумент указывает Flask, где находится  приложение. Так Flask сможет определить местоположение шаблонов и статических файлов, о них -  дальше. 
+Создаётся первый маршрут
+Весь бэкенд строится на маршрутах — или URL-адресах. Они помогают задавать структуру и поведение веб-приложениям.
+Маршруты — это отдельные «вкладки» на сайте. Например, если зайти на сайт Skillbox, откроется его главная страница www.skillbox.ru. А если кликнуть на любой курс, то можно перейти на другую страницу сайта с другим URL-адресом, например, таким как www.skillbox.ru/course/profession-python. К адресу сайта добавляется текст: /course/profession-python/. Эта «приписка» и обеспечивает переход на другую страницу с другим содержимым. Таким образом, маршруты позволяют создавать разные страницы с разным наполнением в рамках одного сайта.
+
+Задание маршрута во Flask. 
+Для этого нужно написать следующее:
+@app.route('/')
+def hello_world():
+return 'Hello, World!'
+Так создётся URL-адрес главной страницы сайта. Например, для Skillbox главной страницей будет www.skillbox.ru. Тут можно дописать слеш: www.skillbox.ru/.
+Сам маршрут задаётся в строке @app.route('/'). Внутрь круглых скобочек вписываются разные маршруты, а пока достаточно и стандартного.
+Далее в этом примере внутри маршрута размещается функция hello_world(), которая будет выполняться при обращении к корневому URL, или главной странице сайта ( маршрут @app.route('/') ведёт именно на неё). Функция возвращает строку Hello, World! в браузере.
+Запуск приложения
+Теперь нам нужно запустить приложение:
+if __name__ == '__main__':
+    app.run()
+Этот код гарантирует, что сервер Flask будет запущен только в том случае, если файл app.py был запущен напрямую, а не импортирован как модуль.Файл app.py сохраняется и запускается например с помощью команды в консоли:
+python app.py
+После запуска должно появится сообщение сообщение, что сервер Flask был запущен:
+
+* Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+Создание блога на Flask
+Блог — это специальный сайт или раздел на сайте с контентом на определенную тему, который регулярно обновляется. Чаще всего информация в блоге отображается в обратном хронологическом порядке: первыми идут статьи и посты, которые были опубликованы последними.
+Создание блога требует использования HTML-шаблона и подключения базы данных.
+В этом предварительном описании будет использоваться базовый код из предыдущего раздела. Он находится в файле app.py:
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+   return 'Hello, World!'
+
+if __name__ == '__main__':
+   app.run()
+
+Создание HTML-шаблона
+HTML-шаблоны — это файлы, которые задают структуру и содержимое страниц сайта. Шаблоны – это средство для упрощения разработки сайта — не нужно много раз писать один и тот же HTML-код, так как он может просто шаблонизирован.
+Также HTML-шаблоны с помощью заготовленных блоков, которые можно настраивать и использовать повторно позволяют создавать динамические веб-страницы . Шаблоны помогают избежать дублирования кода и облегчают поддержку приложения, так как можно легко изменять отображение страниц, при этом не затрагивая внутреннюю логику. 
+Например, можно использовать один и тот же базовый шаблон для всех страниц сайта и переопределять блоки контента для каждой страницы. В таком случае, если  понадобится изменить дизайн всего сайта, можно изменить только базовый шаблон, а все страницы обновятся автоматически, без дополнительных усилий.
+
+Создание HTML-шаблонов 
+Под них выделяется специальная папка  templates и  в неё добавляется файл base.html со следующим (простым) содержимым:
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+  <body>
+    {% block content %}{% endblock %}
+  </body>
+</html>
+Этот шаблон будет в основе всех остальных HTML-страниц Flask приложения.  В нём прописан заголовок:
+<head>
+  <title>{% block title %}{% endblock %}</title>
+</head>
+и основной контент (тело) страницы:
+<body>
+  {% block content %}{% endblock %}
+</body>
+Шаблон включает важные теги {% block %} и {% endblock %}. Они нужны, для динамического добавления в шаблон новых элементов: других HTML-блоков, JavaScript-код и тому подобного.
+Теперь создаётся второй шаблон, который называется index.html. Он будет наследовать элементы базового шаблона:
+
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+  <h1>Welcome to website!</h1>
+  <p>This is the homepage.</p>
+{% endblock %}
+Этот шаблон переопределяет заголовок страницы и определяет контент, который будет отображаться на домашней странице: заголовок страницы Home и небольшой текст.
+
+Использование HTML-шаблонов
+Для этого надо изменить файл app.py и импортировать функцию render_template из библиотеки Flask, которая позволяет работать с шаблонами:
+from flask import Flask, render_template
+Далее изменяется маршрут главной страницы и чтобы отобразить шаблон index.html в нём используется новая функция:
+# Маршрут и шаблон
+@app.route('/')
+def index():
+    return render_template('index.html')
+Изменения сохраняются в файлах app.py, index.html и base.html, а затем снова запускается приложение... 
+Далее надо открыть браузер и перейти по адресу http://127.0.0.1:5000/ (иллюстраций результатов выполнения  здесь не предусмотрено).
+Подключение базы данных
+Для обеспечения полноценной работы приложения (чтобы вести блог) нужно куда-то сохранять посты (публикации, которые могут состоять из текста, картинок и ссылок), картинки, видео и тому подобное. Куда-то — это в базу данных. База данных нужна, чтобы хранить, обрабатывать и сохранять результаты обработки (возможно, что и никакой) данные.
+Дальше будет использоваться базу данных SQLite - она занимает совсем немного места и её не нужно скачивать отдельно, потому что она сразу есть в python.
+Базу данных надо импортировать
+import sqlite3
+Создать функцию, которая обеспечит подключение к базе данных и вернёт объект подключения:
+def get_db_connection():
+    conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+Эта функция создаёт подключение к базе данных database.db и устанавливает режим получения результатов запросов в виде словаря Row, что позволит обращаться к столбцам базы данных по их именам.
+Создание базы данных конкретного приложения. Разрабатываемое и далее описываемое приложение предназначено для сбора информации о кандидатах в экипажи космических кораблей (звёздные войны) или стратегических бомбардировщиков (война миров). 
+Внимание! Ни один из перечисленных вариантов применения приложения, разумеется, не имеет никакого отношения к реальной жизни.
+Перед тем как использовать базу данных, её нужно инициализировать и создать таблицу posts.
+У поста описываемого приложения будет четыре поля с данными: ID - уникальный идентификатор, поле Name (без комментариев),  Staff_member (обязанности на борту – пилоты, штурманы, механики), Rank (звание – штатские, лейтенанты, капитаны, майоры... В  'реальной' жизни или в 'звёздных войнах' – не важно ). Соответственно, ещё раз название полей перед созданием таблицы — id,  Name,  Staff_member, Rank.
+def init_db():
+    conn = get_db_connection()
+    conn.execute('CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT NOT NULL, Staff_member TEXT NOT NULL, Rank TEXT NOT NULL)')
+    conn.close()
+Функция execute() создаёт таблицу posts с полями id,  Name,  Staff_member, Rank. У каждого из этих полей будет собственный тип данных: целое число, строка, строка и строка.
+Поле id объявляется со специальным параметром AUTOINCREMENT, чтобы при добавлении нового поста его id автоматически увеличивался на 1. Параметр PRIMARY KEY нужен для уточнения, что строки в таблице уникальные и не пустые.
+Инициализировать базу данных нужно в самом начале. Во Flask можно сделать это перед первым запросов к базе данных с помощью следующего кода:
+@app.before_request
+def before_request():
+    init_db()
+Здесь используется декоратор @app.before_request, который указывает, что функция before_request() вызывается перед тем, как запустится 'рендер шаблонов' -  функция render_template для отрисовки шаблонов, которую  предоставляет Flask.
+Таким образом, данные будут храниться в виде таблицы, где каждая строка — уникальный пост, а каждый столбец (или ячейка) — информация об этом посте, имена, обязанности, звания. 
+В приложении также понадобится функция, которая будет закрывать подключение к базе данных (она будет действовать через объект подключения):
+def close_db_connection(conn):
+    conn.close()
+Теперь можно использовать эти функции для выполнения запросов к базе данных внутри приложения. Чтобы функция index(), получала все записи из таблицы posts, её нужно обновить:
+@app.route('/')
+def index():
+    conn = get_db_connection()
+    conn.execute('INSERT INTO posts (Name, Staff_member, Rank) VALUES ("List of crew members is here", " ", " ")')
+    posts = conn.execute('SELECT * FROM posts').fetchall()
+    conn.close()
+    return render_template('index.html', posts=posts)
+Здесь происходит подключение к базе данных с помощью функции get_db_connection(), в базу данных записывается заголовок таблицы (информация для пользователя), далее  с помощью метода fetchall() прочитываются все записи в таблице – запрос SELECT  выполняется к таблице posts. Затем через объект подключения conn  с помощью функции close_db_connection соединение с базой разрывается  и  полученные записи передаются в шаблон index.html с помощью функции render_template().
+Создание шаблонов.
+Шаблон (файл post.html) располагается в папке templates. Содержит ссылку на страницу sun_system, заголовок,  заголовок, текст и ссылку на страницу index, где предполагается составлять списки кандидатов для формирования экипажей (в настоящий момент эта опция ещё находится в стадии разработки):
+<!DOCTYPE html>
+<html>
+    <div>
+    <a href="/sun_system">planets</a>
+    </div>
+<head>
+    <title>{{ post.Name }}</title>
+</head>
+<body>
+    <h1>{{ post.Name }}</h1>
+    <p>{{ post.Staff_member }}</p>
+    <p>{{ post.Rank }}</p>
+    <a href="{{ url_for('index') }}">Back to crew making</a>
+</body>
+</html>
+При рендеринге в эту HTML-страницу будет передаваться пост, который извлекается из базы данных. У этого поста будут заголовок (title) и основной текст (content), а всё вместе будет лежать внутри объекта post.
+В этом посте объявлена функция — url_for(). Она позволяет перейти на другой маршрут и отрисовать другую HTML-страницу. В данном случае, если нажать на ссылку Back to index, в модуле app.py запустится функция index(), которая обеспечит переход (перенаправит) на главную страницу (маршрут /) и отрисует шаблон index.html.
+Теперь в файле app.py нужно сделать новый маршрут под один из постов:
+@app.route('/<int:post_id>')
+def get_post(post_id):
+    conn = get_db_connection()
+    conn.execute('INSERT INTO posts (Name, Staff_member, Rank) VALUES ("List of crew members is here", "potential members of the crues:", " first pylot, second pylot, navigator, flight mechanic")')
+    post = conn.execute('SELECT * FROM posts WHERE id = ?', (post_id,)).fetchone()
+    conn.close()
+    return render_template('post.html', post = post)
+Здесь декоратор @app.route('/<int:post_id>') задаёт новый маршрут.  <int:post_id> — это ещё одно указание на то, что индекс поста должен быть целым числом (int), а не, например, строкой.
+get_post(post_id) — обеспечивает передачу id поста, он «встраивается» в URL-адрес и добавляется к запросу к базе данных.
+post = conn.execute ('SELECT * FROM posts WHERE id =? ', (post_id,)).fetchone()
+ из базы данных запрашивается  пост id и функцией fetchone() берётся одна строка.
+return render_template ('post.html', post=post) 
+рендер HTML-шаблона и обеспечивает передачу в post.html полученного поста.
+Вывод постов на страницу index.html 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crew candidates</title>
+</head>
+<body>
+    <h1>Crew candidates</h1>
+     <a href="{{ url_for('add_post') }}"><button>Add new crew member</button></a>
+    <ul>
+        {% for post in posts %}
+      <li><a href="{{ url_for('get_post', post_id=post['id']) }}">{{ post['Name'] }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+Здесь главный оператор – тег <ul>...</ul>. По всем элементам post списка posts из базы данных  элемента создаётся заголовок со ссылкой на пост. При нажатии на ссылку вызывается функция url_for() из пакета Flask, которая  может генерировать URL с помощью функции url_for() из пакета flask, а ей передаётся функция-рендер get_post() и ID поста.
+Главный движок работает в теге <ul>: там по всем элементам списка posts  и для каждого создаётся заголовок со ссылкой на пост. При нажатии на ссылку вызывается функция url_for(), а ей передаётся функция-рендер get_post() и ID поста.
+@app.route('/')
+def index():
+    conn = get_db_connection()
+    conn.execute('INSERT INTO posts (Name, Staff_member, Rank) VALUES ("List of crew members is here", " ", " ")')
+    posts = conn.execute('SELECT * FROM posts').fetchall()
+    conn.close()
+    return render_template('index.html', posts=posts)
+
+Формирование списа кандидатов
+{% extends 'base.html' %}
+
+{% block content %}
+<html>
+
+  <h1>Add new crew member </h1>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  <form method="post">
+
+    <label for="Name">Name</label><br>
+    <input type="text" id="Name" name="Name"><br>
+
+    <label for="Staff_member">Staff member</label><br>
+    <textarea id="Staff_member" name="Staff_member"></textarea><br>
+
+    <label for="Rank">Rank</label><br>
+    <textarea id="Rank" name="Rank"></textarea><br>
+
+   <br>
+
+     <input id="testCheck" type="checkbox" value  name="checkGo">
+     <label for="testCheck">Exam passed</label>
+
+     <input id="XXXtestCheck" type="checkbox" value  name="XXXcheckGo">
+     <label for="XXXtestCheck">Cleared for flights</label>
+
+    <br>
+
+    <input type="submit" value="Submit">
+
+  </form>
+
+</html>
+{% endblock %}
+
+Submit – обеспечивает запись в базу данных новых (сейчас и старых) кандидатов на борт. Без формирования  самого экипажа. В будущем это будет сделано. Здесь важны два checkbox'a. Один из них отображает информацию о сдаче экзамена, второй – о допуске к полётам. И на index.html кнопочка "add new crew member" после включения в список  очередного кандидата осуществляется переход на html страницу с информацией о включённом в список нового члена списка кандидатов в полёт.
+<!DOCTYPE html>
+<html>
+    <div>
+    <a href="/sun_system">planets</a>
+    </div>
+<head>
+    <title>{{ post.Name }}</title>
+</head>
+<body>
+    <h1>{{ post.Name }}</h1>
+    <p>{{ post.Staff_member }}</p>
+    <p>{{ post.Rank }}</p>
+    <a href="{{ url_for('index') }}">Back to crew making</a>
+</body>
+</html>
+С этой страницы можно перейти на страницу, где показывается список возможных членов экипажей, Также по "щелчку" записи с членом этого можно  списка можно попасть на страницу post.html, где выводится информация о конкретном члене списка кандидатов полёт. Кнопочка "back to crew making" обеспечивает переход к странице, на которой производится формирование списка претендентов.
+В приложении есть ещё одна страница: sun_system.html. туда можно попасть  по ссылке plahets. 
+<html>
+    <div>
+    <a href="/add_post">to crew making</a>
+    </div>
+    <p style="margin-top: 1px;">   </p>
+    Hello, {{ user.nickname }}!
+    <p style="margin-top: 1px;"></p>
+    <label>&nbsp;&nbsp;&nbsp;___________________</label>
+ <p style="margin-top: 1px;">
+    <head>
+        <title>{{ title }} - SunSystem</title>
+    </head>
+ </p>
+              <!-- группы планет -->
+         <!-- расстояние между словами -->
+    <p>&nbsp;&nbsp;&nbsp;Planet &nbsp;|&nbsp;&nbsp; Group</p>
+    <!--<p style="margin-top: 1px;"></p>-->
+    <label>&nbsp;&nbsp;&nbsp;______|____________</label>
+    </p>
+
+        {% for post in posts %}
+        <div><p>&nbsp; &nbsp; {{ post.planet.nickname}}: &nbsp; {{post.body}}</p></div>
+        {% endfor %}
+
+</html>
+И вернуться на html страницу add_post.html для того, чтобы продолжить формировать список кандидатов.
+
+Страницы с кодом представлены в приложении
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Приложение
+
+
+
+
+
+app.py
+________
+import flask
+from flask import Flask, render_template, request, redirect, url_for
+import sqlite3
+app = Flask(__name__)
+# ===============================================================
+
+@app.route('/')
+def index():
+    conn = get_db_connection()
+    conn.execute('INSERT INTO posts (Name, Staff_member, Rank) VALUES ("List of crew members is here", " ", " ")')
+    posts = conn.execute('SELECT * FROM posts').fetchall()
+    conn.close()
+    return render_template('index.html', posts=posts)
+
+@app.before_request
+def before_request():
+    init_db()
+def init_db():
+    conn = get_db_connection()
+    conn.execute('CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT NOT NULL, Staff_member TEXT NOT NULL, Rank TEXT NOT NULL)')
+    conn.close()
+def get_db_connection():
+    conn = sqlite3.connect('baseDB.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
+def close_db_connection(conn):
+    conn.close()
+
+@app.route('/<int:post_id>')
+def get_post(post_id):
+    conn = get_db_connection()
+    conn.execute('INSERT INTO posts (Name, Staff_member, Rank) VALUES ("List of crew members is here", "potential members of the crues:", " first pylot, second pylot, navigator, flight mechanic")')
+    post = conn.execute('SELECT * FROM posts WHERE id = ?', (post_id,)).fetchone()
+    conn.close()
+    return render_template('post.html', post = post)
+
+@app.route('/add_post', methods=['GET', 'POST'])
+def add_post():
+    if request.method == 'POST':
+        Name = request.form['Name']
+        Staff_member = request.form['Staff_member']
+        Rank = request.form['Rank']
+        XXXcheckValues = request.form.get('XXXcheckGo')
+        XXXcheck = str(XXXcheckValues)
+        checkValues = request.form.get('checkGo')
+        check = str(checkValues)
+        if check == '':
+            check = 'exam passed'
+        else:
+            check = 'exam failed'
+
+        if XXXcheck == '':
+            XXXcheck = 'cleared for flights'
+        else:
+            XXXcheck = 'not allowed to fly'
+        Name = Name + '  >'+ check + '  :' + XXXcheck
+        conn = get_db_connection()
+        conn.execute('INSERT INTO posts (Name, Staff_member, Rank) VALUES (?, ?, ?)', (Name, Staff_member, Rank))
+
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for('index'))
+    return render_template('add_post.html')
+
+
+@app.route('/')
+@app.route('/sun_system')
+def sun_system():
+    user = {'nickname': 'Sun System'}
+    posts = [
+         {'planet':{'nickname':'Sun'},
+          'body' : 'stars group'},
+        # ===============================
+           {'planet':{'nickname':'Mercury'},
+            'body' : 'earth group'},
+           {'planet':{'nickname':'Venus'},
+            'body': 'earth group'},
+           {'planet':{'nickname':'Terra'},
+            'body': 'earth group'},
+           {'planet': {'nickname': 'Mars'},
+            'body': 'earth group'},
+           {'planet': {'nickname': "Jupiter"},
+            'body': 'giants group'},
+           {'planet':{'nickname':'Saturn'},
+            'body': 'giants group'},
+           {'planet': {'nickname':'Uranus'},
+            'body': 'giants group'},
+           {'planet': {'nickname':'Neptune'},
+            'body': 'giants group'},
+           {'planet':{'nickname':'Pluto'},
+            'body': 'pluto group'},
+          ]
+    return render_template(
+            "sun_system.html",
+            title='Home',
+            user=user,
+            posts=posts
+            )
+if __name__ == '__main__':
+    app.run(debug=True)
+
+base.html
+______________
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+  <body>
+    {% block content %}{% endblock %}
+  </body>
+</html>
+
+add_post.html
+______________
+
+{% extends 'base.html' %}
+
+{% block content %}
+<html>
+
+  <h1>Add new crew member </h1>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  <form method="post">
+
+    <label for="Name">Name</label><br>
+    <input type="text" id="Name" name="Name"><br>
+
+    <label for="Staff_member">Staff member</label><br>
+    <textarea id="Staff_member" name="Staff_member"></textarea><br>
+
+    <label for="Rank">Rank</label><br>
+    <textarea id="Rank" name="Rank"></textarea><br>
+
+   <br>
+
+     <input id="testCheck" type="checkbox" value  name="checkGo">
+     <label for="testCheck">Exam passed</label>
+
+     <input id="XXXtestCheck" type="checkbox" value  name="XXXcheckGo">
+     <label for="XXXtestCheck">Cleared for flights</label>
+    <br>
+    <input type="submit" value="Submit">
+  </form>
+</html>
+{% endblock %}
+
+
+index.html
+___________________
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crew candidates</title>
+</head>
+<body>
+    <h1>Crew candidates</h1>
+
+     <a href="{{ url_for('add_post') }}"><button>Add new crew member</button></a>
+
+<ul>
+        {% for post in posts %}
+        <li><a href="{{ url_for('get_post', post_id=post['id']) }}">{{ post['Name'] }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
+post.html
+______________
+<!DOCTYPE html>
+<html>
+
+
+    <div>
+    <a href="/sun_system">planets</a>
+    </div>
+<head>
+    <title>{{ post.Name }}</title>
+</head>
+<body>
+    <h1>{{ post.Name }}</h1>
+    <p>{{ post.Staff_member }}</p>
+    <p>{{ post.Rank }}</p>
+    <a href="{{ url_for('index') }}">Back to crew making</a>
+</body>
+</html>
+
+sun_system.html
+___________________
+
+<html>
+
+    <div>
+    <a href="/add_post">to crew making</a>
+
+    </div>
+
+    <p style="margin-top: 1px;">   </p>
+
+    Hello, {{ user.nickname }}!
+
+    <p style="margin-top: 1px;"></p>
+    <label>&nbsp;&nbsp;&nbsp;___________________</label>
+
+ <p style="margin-top: 1px;">
+    <head>
+        <title>{{ title }} - SunSystem</title>
+    </head>
+ </p>
+              <!-- группы планет -->
+         <!-- расстояние между словами -->
+    <p>&nbsp;&nbsp;&nbsp;Planet &nbsp;|&nbsp;&nbsp; Group</p>
+    <!--<p style="margin-top: 1px;"></p>-->
+    <label>&nbsp;&nbsp;&nbsp;______|____________</label>
+    </p>
+        {% for post in posts %}
+        <div><p>&nbsp; &nbsp; {{ post.planet.nickname}}: &nbsp; {{post.body}}</p></div>
+        {% endfor %}
+</html>
+________________________________________________________________________
+
+ТИПА 
+"Я ВЕРЮ, ДРУЗЬЯ, КАРАВАНЫ РАКЕТ ПОМЧАТ НАС ВПЕРЁД ОТ ЗВЕЗДЫ ДО ЗВЕЗДЫ! На пыльных тропинках далёких планет останутся наши следы..."
+________________________________________________________________________
+
