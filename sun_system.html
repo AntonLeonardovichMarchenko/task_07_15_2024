@@ -1,0 +1,33 @@
+<html>
+
+    <div>
+    <a href="/add_post">to crew making</a>
+
+    </div>
+
+    <p style="margin-top: 1px;">   </p>
+
+    Hello, {{ user.nickname }}!
+
+    <p style="margin-top: 1px;"></p>
+    <label>&nbsp;&nbsp;&nbsp;___________________</label>
+
+ <p style="margin-top: 1px;">
+    <head>
+        <title>{{ title }} - SunSystem</title>
+    </head>
+ </p>
+
+              <!-- группы планет -->
+         <!-- расстояние между словами -->
+    <p>&nbsp;&nbsp;&nbsp;Planet &nbsp;|&nbsp;&nbsp; Group</p>
+
+    <!--<p style="margin-top: 1px;"></p>-->
+    <label>&nbsp;&nbsp;&nbsp;______|____________</label>
+    </p>
+
+        {% for post in posts %}
+        <div><p>&nbsp; &nbsp; {{ post.planet.nickname}}: &nbsp; {{post.body}}</p></div>
+        {% endfor %}
+
+</html>
